@@ -28,11 +28,17 @@ module.exports = {
             HAD_BID: 'had_bid',
             NO_BID: 'no_bid',
         },
-        PAGE_SCRAPPING_THRESHOLD: 1000,
     },
     MONGO: {
         CONNSTRING: 'localhost',
         DB: 'char-bazaar',
         AUCTIONS_COLLECTION: 'auctions',
+        MIGRATIONS_COLLECTION: 'migrations',
+        SCRAPPING_HISTORY_COLLECTION: 'scrapping_history',
+    },
+    DATES: {
+        BAZAAR_DAY_DATE_FORMAT: 'MMM DD YYYY',
+        TIMEZONE_SUFFIX: 'cest',
+        TIME_WINDOW_MULTIPLIER: 2.5,
     }
 }

@@ -17,6 +17,7 @@ const {
     },
     GENDERS,
 } = require('../helpers/constants')
+const {formatDateToUTC} = require('../helpers/date-utils')
 const url = require('url')
 
 const getCharacterName = rawName => rawName.trim().toLowerCase()
@@ -79,12 +80,12 @@ const sanitizeAuctionDetails = rawAuctionDetails =>
 
 const getAuctionStartTime = rawAuctionDetails => {
     const startTimePrefixIndex = rawAuctionDetails.indexOf(START_DATE_PREFIX)
-    return rawAuctionDetails[startTimePrefixIndex + 1]
+    return formatDateToUTC(rawAuctionDetails[startTimePrefixIndex + 1])
 }
 
 const getAuctionEndTime = rawAuctionDetails => {
     const endTimePrefixIndex = rawAuctionDetails.indexOf(END_DATE_PREFIX)
-    return rawAuctionDetails[endTimePrefixIndex + 1]
+    return formatDateToUTC(rawAuctionDetails[endTimePrefixIndex + 1])
 }
 
 const getAuctionFinalStatus = rawAuctionDetails => {
@@ -105,7 +106,7 @@ const getAuctionDetails = rawAuctionDetails => {
     const sanitizedRawAuctionDetails = sanitizeAuctionDetails(rawAuctionDetails)
     
     return {
-        starTime: getAuctionStartTime(sanitizedRawAuctionDetails),
+        startTime: getAuctionStartTime(sanitizedRawAuctionDetails),
         endTime: getAuctionEndTime(sanitizedRawAuctionDetails),
         finalStatus: getAuctionFinalStatus(sanitizedRawAuctionDetails),
         shownAmount: getAuctionShownAmount(sanitizedRawAuctionDetails),
@@ -114,7 +115,7 @@ const getAuctionDetails = rawAuctionDetails => {
 
 const parseAuctionData = ({rawName, rawUrl, rawStatus, rawCharacterDetails, rawAuctionDetails}) => {
     const {level, vocation, gender, world} = getCharacterDetails(rawCharacterDetails)
-    const {starTime, endTime, shownAmount, finalStatus} = getAuctionDetails(rawAuctionDetails)
+    const {startTime, endTime, shownAmount, finalStatus} = getAuctionDetails(rawAuctionDetails)
     return {
         name: getCharacterName(rawName),
         url: getAuctionUrl(rawUrl),
@@ -124,7 +125,7 @@ const parseAuctionData = ({rawName, rawUrl, rawStatus, rawCharacterDetails, rawA
         vocation,
         gender,
         world,
-        starTime,
+        startTime,
         endTime,
         shownAmount,
         finalStatus,
