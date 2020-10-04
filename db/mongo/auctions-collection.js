@@ -4,7 +4,6 @@ const getAuctionByAuctionId = auctionId => auctionsCollection.findOne({auctionId
 
 const insertAuction = auction => auctionsCollection.insert({
     ...auction,
-    createdAt: new Date(),
     auction_fully_parsed: false,
 })
 
