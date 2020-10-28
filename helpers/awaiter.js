@@ -1,3 +1,4 @@
+
 const randomNumber = require(`random-number`)
 
 var intervalGenerator = randomNumber.generator({
@@ -7,5 +8,6 @@ var intervalGenerator = randomNumber.generator({
 })
 
 module.exports = {
-    awaitForAWhile: (ms = intervalGenerator()) => new Promise(resolve => setTimeout(() => resolve(), ms)),
+	awaitForAWhile: (ms = intervalGenerator()) =>
+		new Promise(resolve => setTimeout(() => resolve(), ms)),
 }

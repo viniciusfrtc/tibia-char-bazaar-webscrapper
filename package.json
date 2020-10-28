@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "v14.13.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "backup": "sh ./scripts/mongo-backup.sh",
-    "scrap-auctions-list": "node ./auctions-list/index.js && npm run backup"
+    "scrap-auctions-list": "node ./auctions-list/index.js"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +18,13 @@
     "monk": "^7.3.2",
     "puppeteer": "^5.3.1",
     "random-number": "0.0.9"
+  },
+  "devDependencies": {
+    "eslint": "^7.12.1",
+    "eslint-config-standard": "^15.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.2"
   }
 }

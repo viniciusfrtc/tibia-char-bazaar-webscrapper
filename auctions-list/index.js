@@ -1,13 +1,18 @@
 
 const {getAuctionPageData} = require('./scrapper')
-const {getAuctionByAuctionId, insertAuction} = require('../db/mongo/auctions-collection')
-const {getLastScrappingTime, updateLastScrappingTime} = require('../db/mongo/scrapping-history-collection')
+const {
+	getAuctionByAuctionId,
+	insertAuction,
+} = require('../db/mongo/auctions-collection')
+const {getLastScrappingTime,
+	updateLastScrappingTime,
+} = require('../db/mongo/scrapping-history-collection')
 const {awaitForAWhile} = require('../helpers/awaiter')
 const {
-	getHoursDifferenceFromNow, 
+	getHoursDifferenceFromNow,
 	isBeforeFrom,
 	subtractHoursFromNow,
-} = require('../helpers/date-utils') 
+} = require('../helpers/date-utils')
 const {
 	DATES: {
 		TIME_WINDOW_MULTIPLIER,
@@ -31,6 +36,7 @@ const parseAndSaveAuctionsList = async (pageId = 1) => {
 			console.log('auction already parsed')
 		}
 		if (isBeforeFrom(auction.endTime, scrappingTimeThreshold)) {
+			// eslint-disable-next-line max-len
 			console.log('last auction has reached the date threshold, therefore scrapping is done for now')
 			return updateLastScrappingTime()
 		}
@@ -54,5 +60,3 @@ const parseAndSaveAuctionsList = async (pageId = 1) => {
 	await parseAndSaveAuctionsList(1)
 	process.exit(0)
 })()
-
-

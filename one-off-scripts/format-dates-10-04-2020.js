@@ -11,52 +11,56 @@
 const {migrationsCollection} = require('../db/mongo/db-config')
 const {formatDateToUTC} = require('../helpers/date-utils')
 
-const getNextAuctionToMigrate = () => 
-    migrationsCollection.findOne({
-        migrated: {
-            $exists: false,
-        },
-    })
+const getNextAuctionToMigrate = () =>
+	migrationsCollection.findOne({
+		migrated: {
+			$exists: false,
+		},
+	})
 
-const getNextAuctionToDeleteFlag = () => 
-    migrationsCollection.findOne({
-        migrated: {
-            $exists: true,
-        },
-    })
+const getNextAuctionToDeleteFlag = () =>
+	migrationsCollection.findOne({
+		migrated: {
+			$exists: true,
+		},
+	})
 
 const migrateAuction = async auction =>
-    migrationsCollection.findOneAndUpdate({_id: auction._id}, {
-        $set: {
-            migrated: true,
-            startTime: formatDateToUTC(auction.starTime),
-            endTime: formatDateToUTC(auction.endTime),
-        },
-        $unset: {starTime: ''},
-    })
+	migrationsCollection.findOneAndUpdate({_id: auction._id}, {
+		$set: {
+			migrated: true,
+			startTime: formatDateToUTC(auction.starTime),
+			endTime: formatDateToUTC(auction.endTime),
+		},
+		$unset: {starTime: ''},
+	})
 
 
-const deleteFlag = async auction => 
-    migrationsCollection.findOneAndUpdate({_id: auction._id}, {
-        $unset: {migrated: ''},
-    })
+const deleteFlag = async auction =>
+	migrationsCollection.findOneAndUpdate({_id: auction._id}, {
+		$unset: {migrated: ''},
+	})
 
 const migrateAuctions = async () => {
-    const auctionToMigrate = await getNextAuctionToMigrate()
-    if (auctionToMigrate){
-        console.log(`migrating auction number ${auctionToMigrate.auctionId}`)
-        await migrateAuction(auctionToMigrate)
-        return migrateAuctions()
-    }
+	const auctionToMigrate = await getNextAuctionToMigrate()
+	if (auctionToMigrate){
+		console.log(`migrating auction number ${auctionToMigrate.auctionId}`)
+		await migrateAuction(auctionToMigrate)
+		// eslint-disable-next-line no-unused-vars
+		return migrateAuctions()
+	}
 }
 
 const deleteFlags = async () => {
-    const flagToDelete = await getNextAuctionToDeleteFlag()
-    if (flagToDelete){
-        console.log(`deleting flag from auction number ${flagToDelete.auctionId}`)
-        await deleteFlag(flagToDelete)
-        return deleteFlags()
-    }
+	const flagToDelete = await getNextAuctionToDeleteFlag()
+	if (flagToDelete){
+		console.log(
+			`deleting flag from auction number ${flagToDelete.auctionId}`
+		)
+		await deleteFlag(flagToDelete)
+		// eslint-disable-next-line no-unused-vars
+		return deleteFlags()
+	}
 }
 
 // // step 2
